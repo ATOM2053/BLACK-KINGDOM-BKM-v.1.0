@@ -1,0 +1,1329 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK KINGDOM (BKM) 🌊 🩵 - ระบบจัดการและสมัครเข้าแก๊ง</title>
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & DESIGN TOKENS --- */
+        :root {
+            --bg-dark: #060911;
+            --bg-card: rgba(15, 23, 42, 0.85);
+            --bg-card-hover: rgba(30, 41, 59, 0.9);
+            --accent-blue: #38bdf8;
+            --accent-cyan: #7dd3fc;
+            --accent-deep: #0284c7;
+            --accent-glow: rgba(56, 189, 248, 0.35);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border-color: rgba(56, 189, 248, 0.25);
+            --border-highlight: rgba(125, 211, 252, 0.6);
+            --yellow-warning: #f59e0b;
+            --orange-warning: #f97316;
+            --red-warning: #ef4444;
+            --black-warning: #334155;
+            --gold-crown: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(56, 189, 248, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-deep);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(6, 9, 17, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 75px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo i {
+            color: var(--gold-crown);
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+        }
+
+        .logo span {
+            color: var(--accent-cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .nav-tab.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent-blue) 100%);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        /* --- MAIN CONTENT & PAGES --- */
+        main {
+            flex: 1;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        .page-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HEADINGS --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .page-subtitle {
+            color: var(--text-sub);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* --- GLASS CARD --- */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
+        }
+
+        /* --- PAGE 1: APPLY FORM --- */
+        .form-container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: var(--accent-cyan);
+        }
+
+        .form-control {
+            background: rgba(6, 9, 17, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px var(--accent-glow);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select.form-control option {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .form-divider {
+            grid-column: span 2;
+            height: 1px;
+            background: var(--border-color);
+            margin: 10px 0;
+        }
+
+        .form-section-title {
+            grid-column: span 2;
+            font-size: 1.15rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent-blue) 100%);
+            color: #fff;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--accent-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+        }
+
+        /* --- PAGE 2: QUALIFICATIONS --- */
+        .qual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .qual-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 22px;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .qual-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            background: var(--bg-card-hover);
+        }
+
+        .qual-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(56, 189, 248, 0.12);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .qual-text h4 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qual-text p {
+            font-size: 0.88rem;
+            color: var(--text-sub);
+        }
+
+        .badge-important {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .highlight-banner {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.2) 0%, rgba(56, 189, 248, 0.05) 100%);
+            border: 1px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .highlight-banner h3 {
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- PAGE 3: GANG RULES (PENALTY SYSTEM) --- */
+        .penalty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 15px;
+        }
+
+        .penalty-item {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .penalty-item:hover {
+            border-color: var(--accent-cyan);
+            background: var(--bg-card-hover);
+            transform: translateX(4px);
+        }
+
+        .penalty-num {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .penalty-title {
+            font-size: 0.92rem;
+            color: var(--text-main);
+        }
+
+        .badge-penalty {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-yellow { background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid var(--yellow-warning); }
+        .badge-orange { background: rgba(249, 115, 22, 0.2); color: #fdba74; border: 1px solid var(--orange-warning); }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--red-warning); }
+        .badge-black { background: rgba(51, 65, 85, 0.6); color: #cbd5e1; border: 1px solid var(--black-warning); }
+
+        /* --- PAGE 4: ACTIVITY RULES --- */
+        .activity-section {
+            margin-bottom: 35px;
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, transparent 100%);
+            border-left: 4px solid var(--accent-blue);
+            padding: 12px 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
+        }
+
+        .activity-header h3 {
+            font-size: 1.3rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-time {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--gold-crown);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .rule-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rule-list li {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .rule-list li i {
+            color: var(--accent-cyan);
+            margin-top: 3px;
+        }
+
+        .quote-box {
+            background: rgba(7, 9, 17, 0.7);
+            border: 1px dashed var(--accent-cyan);
+            padding: 15px;
+            border-radius: 10px;
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        /* --- PAGE 5: CONTACT INFO --- */
+        .contact-card {
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-logo {
+            font-size: 3rem;
+            color: var(--gold-crown);
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.5));
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-discord-waiting {
+            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+            color: #fff;
+            padding: 16px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-discord-waiting:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(88, 101, 242, 0.6);
+        }
+
+        .btn-discord-main {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-discord-main:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background: rgba(6, 9, 17, 0.95);
+            border-top: 1px solid var(--border-color);
+            padding: 25px 0;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        /* --- SUCCESS MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--bg-dark);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 20px;
+            padding: 35px 25px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 50px var(--accent-glow);
+            transform: scale(0.85);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #4ade80;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px rgba(74, 222, 128, 0.4));
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .modal-desc {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 868px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 75px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 75px);
+                background: rgba(6, 9, 17, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-tab {
+                width: 80%;
+                justify-content: center;
+                padding: 12px;
+                font-size: 1.05rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width, .form-divider, .form-section-title, .btn-submit {
+                grid-column: span 1;
+            }
+
+            .activity-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo" onclick="switchTab('apply')">
+                <i class="fa-solid fa-crown"></i>
+                BLACK KINGDOM <span>BKM</span>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><button class="nav-tab active" onclick="switchTab('apply')"><i class="fa-solid fa-file-pen"></i> กรอกใบสมัคร</button></li>
+                <li><button class="nav-tab" onclick="switchTab('qualifications')"><i class="fa-solid fa-user-check"></i> คุณสมบัติ</button></li>
+                <li><button class="nav-tab" onclick="switchTab('gangRules')"><i class="fa-solid fa-gavel"></i> กฎแก๊ง</button></li>
+                <li><button class="nav-tab" onclick="switchTab('activityRules')"><i class="fa-solid fa-shield-halved"></i> กฎ กิจกรรม</button></li>
+                <li><button class="nav-tab" onclick="switchTab('contact')"><i class="fa-solid fa-address-book"></i> ข้อมูลติดต่อ</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINING ALL 5 PAGES -->
+    <main class="container">
+
+        <!-- PAGE 1: กรอกใบสมัคร -->
+        <section id="apply" class="page-content active">
+            <div class="page-header">
+                <h1 class="page-title">แบบฟอร์มสมัครเข้าแก๊ง BKM</h1>
+                <p class="page-subtitle">กรอกข้อมูลให้ครบถ้วน ข้อมูลจะถูกส่งตรงไปยัง Discord Webhook ของตระกูลทันที</p>
+            </div>
+
+            <div class="glass-card form-container">
+                <form id="applyForm">
+                    <div class="form-grid">
+                        <!-- IC SECTION -->
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-user-gear"></i> ข้อมูลในเกม (In Character - IC)
+                        </div>
+
+                        <div class="form-group">
+                            <label for="icName"><i class="fa-solid fa-signature"></i> ชื่อ IC</label>
+                            <input type="text" id="icName" class="form-control" placeholder="เช่น Somchai_BKM" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="icAge"><i class="fa-solid fa-cake-candles"></i> อายุ IC</label>
+                            <input type="number" id="icAge" class="form-control" placeholder="เช่น 25" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="icGender"><i class="fa-solid fa-venus-mars"></i> เพศ IC</label>
+                            <select id="icGender" class="form-control" required>
+                                <option value="" disabled selected>เลือกเพศ IC</option>
+                                <option value="ชาย">ชาย</option>
+                                <option value="หญิง">หญิง</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="level"><i class="fa-solid fa-ranking-star"></i> เลเวล</label>
+                            <input type="number" id="level" class="form-control" placeholder="ขั้นต่ำ เลเวล 3" min="1" required>
+                        </div>
+
+                        <!-- OC SECTION -->
+                        <div class="form-divider"></div>
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-user-astronaut"></i> ข้อมูลผู้เล่นจริง (Out of Character - OC)
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ocName"><i class="fa-solid fa-user"></i> ชื่อ OC (ชื่อเล่น)</label>
+                            <input type="text" id="ocName" class="form-control" placeholder="เช่น สมชาย" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ocAge"><i class="fa-solid fa-calendar-days"></i> อายุ OC</label>
+                            <input type="number" id="ocAge" class="form-control" placeholder="อายุจริง (รับ 15+)" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ocGender"><i class="fa-solid fa-venus-mars"></i> เพศ OC</label>
+                            <select id="ocGender" class="form-control" required>
+                                <option value="" disabled selected>เลือกเพศ OC</option>
+                                <option value="ชาย">ชาย</option>
+                                <option value="หญิง">หญิง</option>
+                                <option value="อื่นๆ">อื่นๆ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="onlineHours"><i class="fa-solid fa-clock"></i> ชม. ออนไลน์ต่อวัน</label>
+                            <input type="text" id="onlineHours" class="form-control" placeholder="เช่น 3-6 ชม." required>
+                        </div>
+
+                        <!-- PLAYSTYLE & QUESTIONS -->
+                        <div class="form-divider"></div>
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-clipboard-question"></i> ข้อมูลการเล่น & การทดสอบ
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="playStyle"><i class="fa-solid fa-gamepad"></i> สายการเล่น</label>
+                            <select id="playStyle" class="form-control" required>
+                                <option value="" disabled selected>เลือกสายการเล่นของคุณ</option>
+                                <option value="สายสตอรี่">สายสตอรี่</option>
+                                <option value="สายฟาร์ม">สายฟาร์ม</option>
+                                <option value="สายต่อสู้ / กิจกรรม">สายต่อสู้ / กิจกรรม</option>
+                                <option value="ลุยได้ทุกสาย">ลุยได้ทุกสาย</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="reason"><i class="fa-solid fa-heart"></i> ทำไมถึงอยากเข้าแก็ง BLACK KINGDOM?</label>
+                            <textarea id="reason" class="form-control" placeholder="อธิบายเหตุผลของคุณ..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="discordTag"><i class="fa-brands fa-discord"></i> แท็กดิสตัวเอง</label>
+                            <input type="text" id="discordTag" class="form-control" placeholder="เช่น @username หรือ <@ID>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="testerTag"><i class="fa-solid fa-user-check"></i> แท็กผู้คุมสอบ</label>
+                            <input type="text" id="testerTag" class="form-control" placeholder="เช่น @ผู้คุมสอบ หรือ <@ID>" required>
+                        </div>
+
+                        <!-- SUBMIT BUTTON -->
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="fa-solid fa-paper-plane"></i> ส่งใบสมัครเข้าแก๊ง
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- PAGE 2: คุณสมบัติ -->
+        <section id="qualifications" class="page-content">
+            <div class="page-header">
+                <h1 class="page-title">คุณสมบัติผู้สมัคร (QUALIFICATIONS)</h1>
+                <p class="page-subtitle">ข้อกำหนดและคุณสมบัติสำหรับผู้ที่ต้องการเข้าร่วมตระกูล BLACK KINGDOM</p>
+            </div>
+
+            <div class="qual-grid">
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-venus-mars"></i></div>
+                    <div class="qual-text">
+                        <h4>รับทั้ง ชาย / หญิง</h4>
+                        <p>เปิดรับสมาชิกทุกเพศ ที่มีความตั้งใจและเคารพส่วนรวม</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="qual-text">
+                        <h4>เลเวล 3 ขึ้นไป</h4>
+                        <p>มีพื้นฐานการเล่นและเข้าใจระบบของเซิร์ฟเวอร์เป็นอย่างดี</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="qual-text">
+                        <h4>ให้เกียรติกัน <span class="badge-important">สำคัญมาก</span></h4>
+                        <p>พูดจาสุภาพ ให้เกียรติพี่น้องในแก๊งและผู้เล่นอื่นเสมอ</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="qual-text">
+                        <h4>มีวุฒิภาวะสูง & ไม่เรื้อน</h4>
+                        <p>ควบคุมอารมณ์ได้ดี แก้ไขปัญหาด้วยเหตุผล ไม่ก่อความเดือดร้อน</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="qual-text">
+                        <h4>รับอายุ 15 ปีขึ้นไป</h4>
+                        <p>หากอายุต่ำกว่า 15 ปี จะต้องผ่านการพิจารณาเป็นกรณีพิเศษ</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                    <div class="qual-text">
+                        <h4>เวลาออนไลน์ 3+ ชม.</h4>
+                        <p>มีเวลาเข้าร่วมกิจกรรมและช่วยเหลืองานแก๊งอย่างสม่ำเสมอ</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                    <div class="qual-text">
+                        <h4>ไม่หักหลังตระกูล <span class="badge-important">สำคัญมาก</span></h4>
+                        <p>มีความซื่อสัตย์ ไม่นำข้อมูลไปเผยแพร่หรือสร้างความเสียหาย</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-gun"></i></div>
+                    <div class="qual-text">
+                        <h4>มีอาวุธประจำตัว</h4>
+                        <p>หากไม่มีจะได้รับการพิจารณาความพร้อมตามความเหมาะสม</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <div class="qual-text">
+                        <h4>รับทั้ง MB / PC</h4>
+                        <p>รองรับทั้งผู้เล่นบนมือถือ (Mobile) และคอมพิวเตอร์ (PC)</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-user-ninja"></i></div>
+                    <div class="qual-text">
+                        <h4>รับแรงกดดันได้ดี</h4>
+                        <p>พร้อมรับฟังคำสั่ง และอดทนต่อสถานการณ์การแข่งขันสูงได้</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <div class="qual-text">
+                        <h4>ทำตามกฎได้ทุกข้อ</h4>
+                        <p>ปฏิบัติตามกฎแก๊งและกฎกิจกรรมอย่างเคร่งครัดโดยไม่มีข้อละเว้น</p>
+                    </div>
+                </div>
+
+                <div class="qual-card">
+                    <div class="qual-icon"><i class="fa-solid fa-crown"></i></div>
+                    <div class="qual-text">
+                        <h4>เชื่อฟังหลีด / รองหลีด</h4>
+                        <p>เคารพการตัดสินใจและปฏิบัติตามแนวทางการนำของผู้นำแก๊ง</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-banner">
+                <h3><i class="fa-solid fa-fire"></i> รันกิจกรรม 100% พร้อมลุยทุกกิจกรรม!</h3>
+                <p>ไม่สร้างปัญหามาให้ (*สำคัญมาก*) แต่ถ้าสร้างปัญหาแล้วต้องรับผิดชอบด้วยนะครับ/คะ พวกเราอยู่กันแบบครอบครัวพร้อมช่วยเหลือกันเสมอ!</p>
+            </div>
+        </section>
+
+        <!-- PAGE 3: กฎแก๊ง -->
+        <section id="gangRules" class="page-content">
+            <div class="page-header">
+                <h1 class="page-title">กฎการรับใบเตือน (PENALTY SYSTEM)</h1>
+                <p class="page-subtitle">กฎระเบียบภายในแก๊ง BLACK KINGDOM หากฝ่าฝืนจะได้รับใบเตือนตามบทลงโทษ</p>
+            </div>
+
+            <div class="glass-card">
+                <div class="penalty-grid">
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">1.</span> สมาชิกต้องฟังคำสั่งจากหลีดรองหลีด</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง / 🟧 ใบส้ม</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">2.</span> นำพาความเดือดร้อนมาให้ตระกูลโดยไม่รับผิดชอบ</div>
+                        <span class="badge-penalty badge-red">🟥 ใบแดง / ⬛ ใบดำ</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">3.</span> นำพาผู้อื่นหรือคนภายนอกเข้าดิสโดยไม่ได้อนุญาต</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">4.</span> นำสกินแก๊งไปขายหรือจำหน่ายให้ผู้อื่น</div>
+                        <span class="badge-penalty badge-red">🟥 ใบแดง / ⬛ ใบดำ</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">5.</span> เล่นโปรเล่นมอดโกง</div>
+                        <span class="badge-penalty badge-black">⬛ ใบดำ (ปลดออก)</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">6.</span> ด่าเรื้อนไปด่าแก็งอื่น</div>
+                        <span class="badge-penalty badge-orange">🟧 ใบส้ม</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">7.</span> ไม่เชื่อฟังผู้คุมสายสตอรี่</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง / 🟧 ใบส้ม</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">8.</span> ไม่มีความรับผิดชอบต่อหน้าที่</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">9.</span> สอบสวนแล้วให้การเท็จ</div>
+                        <span class="badge-penalty badge-red">🟥 ใบแดง</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">10.</span> แจ้งลาโดยสาเหตุไม่ชัดเจน</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">11.</span> ส่งลิ้งค์ดิสมั่ว</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">12.</span> ด่าบุพการีผู้อื่น</div>
+                        <span class="badge-penalty badge-orange">🟧 ใบส้ม</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">13.</span> ฝ่าฝืนกฎคูลดาวน์ / พบเจอสถานที่ต้องห้าม</div>
+                        <span class="badge-penalty badge-red">🚫 โดนโทษ x2</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">14.</span> นำข้อมูลภายในแก็งไปเผยแพร่</div>
+                        <span class="badge-penalty badge-red">🟥 ใบแดง / ⬛ ใบดำ</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">15.</span> ไม่จ่ายเงินกองกลางแก๊ง</div>
+                        <span class="badge-penalty badge-yellow">🟨 ใบเหลือง</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">16.</span> เข้าร่วมยึดคุก/กิจกรรม แล้วร่วมมือกับแก๊งอื่น</div>
+                        <span class="badge-penalty badge-red">🟥 โดนใบแดง ❗</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">17.</span> มีปัญหา เรื้อน หรือทำร้ายพันธมิตร</div>
+                        <span class="badge-penalty badge-black">⬛ โดนใบดำ ❗❗❗</span>
+                    </div>
+
+                    <div class="penalty-item">
+                        <div class="penalty-title"><span class="penalty-num">18.</span> ทำโพเทคแก๊งแตก</div>
+                        <span class="badge-penalty badge-yellow">🟡 ใบเหลือง + เสียค่าโพเทค ❗</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: กฎ กิจกรรม -->
+        <section id="activityRules" class="page-content">
+            <div class="page-header">
+                <h1 class="page-title">กฎการเล่นกิจกรรมแก๊ง</h1>
+                <p class="page-subtitle">ข้อบังคับในการลงเล่นกิจกรรม AirDrop, ยึดคุก Pawria Town และ วอยึดโซน</p>
+            </div>
+
+            <!-- AIRDROP -->
+            <div class="glass-card activity-section">
+                <div class="activity-header">
+                    <h3><i class="fa-solid fa-box-open" style="color: var(--accent-cyan);"></i> 1. กฎการเล่น AirDrop (แอร์ดรอป แก๊งค์)</h3>
+                    <div class="activity-time"><i class="fa-regular fa-clock"></i> เวลา: 13:00 / 18:00 / 21:00</div>
+                </div>
+                <ul class="rule-list">
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามมีสตอรี่กันโดยเด็ดขาดในเวลากิจกรรม [ บังคับ ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้าม Toxic หรือ บัพกันแรงเกินไป</li>
+                    <li><i class="fa-solid fa-circle-check"></i> สามารถใช้ AED ใน AirDrop ได้</li>
+                    <li><i class="fa-solid fa-circle-check"></i> สามารถใช้ Bandage ในการ Heal ตัวเองได้</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ไม่สามารถใช้อีโมได้ เนื่องจากเป็นการเอาเปรียบ MB / มือถือ [ บังคับ ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใช้ MOD / โปรแกรมโกง หรือสิ่งที่ได้เปรียบฝั่งตรงข้าม [ โทษใบแดง / บังคับ ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> สามารถใส่เกราะเล่นได้ตามปกติ</li>
+                    <li><i class="fa-solid fa-triangle-exclamation" style="color: var(--yellow-warning);"></i> <b style="color: var(--yellow-warning);">ข้อห้ามสำคัญ: ห้ามตีก่อน 5 นาที เด็ดขาด!</b></li>
+                </ul>
+            </div>
+
+            <!-- PAWRIA TOWN JAIL -->
+            <div class="glass-card activity-section">
+                <div class="activity-header">
+                    <h3><i class="fa-solid fa-dungeon" style="color: var(--accent-cyan);"></i> 2. กฎยึดคุก Pawria Town</h3>
+                    <div class="activity-time"><i class="fa-regular fa-clock"></i> เวลาเริ่ม: 20:00 น.</div>
+                </div>
+                <ul class="rule-list">
+                    <li><i class="fa-solid fa-circle-check"></i> ต้องตีกันให้ตายจนเหลือเพียง 1 แก๊ง ถึงจะเก็บจุดยึดคุกได้ (หากทำบัคเก็บโดนใบแดง 🟥 / หากเก็บตอนผู้เล่นยังตายไม่หมดโดนใบส้ม 🟧)</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามร่วมมือกับแก๊งอื่น [ โดนใบส้มทั้งแก๊ง 🟧 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใช้อีโม [ โดนใบแดง 🟥 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามนำเรื่องกิจกรรมมาเป็นสตอรี่ความแค้นส่วนตัว [ โดนใบเหลือง 🟨 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใส่สกินเด็ก หรือสกินตัวเล็ก [ โดนใบส้ม 🟧 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้าม Toxic หรือบัพกันแรงเกินไป [ โดนใบแดง 🟥 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใช้มอด โปร หรือทำบัคเกมทุกชนิด [ โดนใบแดง 🟥 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามอุ้ม กักศพ</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามบู๊ด หรือเปิดซาวด์ก่อกวน [ โดนใบเหลือง 🟨 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามดักจุดเกิด [ โดนใบเหลือง 🟨 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใส่แฟชั่นเล่นกิจกรรม</li>
+                </ul>
+            </div>
+
+            <!-- ZONE WAR -->
+            <div class="glass-card activity-section">
+                <div class="activity-header">
+                    <h3><i class="fa-solid fa-burst" style="color: var(--accent-cyan);"></i> 3. กฎวอยึดโซน</h3>
+                    <div class="activity-time"><i class="fa-regular fa-clock"></i> เวลา: 21:30 - 22:30 น.</div>
+                </div>
+                <ul class="rule-list">
+                    <li><i class="fa-solid fa-circle-check"></i> ห้าม DB หรือ ขับรถชนในโซน [ โดนใบเหลือง 🟨 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามตีนอกสถานที่ [ โดนใบส้ม 🟧 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามอุ้มศพกักศพ [ โดนใบส้ม 🟧 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใส่สกินเด็กเล่นกิจกรรม [ โดนใบส้ม 🟧 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามเล่นโปร มอด [ โดนใบแดง 🟥 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้ามใช้อีโม [ โดนใบแดง 🟥 ]</li>
+                    <li><i class="fa-solid fa-circle-check"></i> ห้าม Toxic หรือบัพแรงเกินไป [ โดนใบแดง 🟥 ]</li>
+                </ul>
+                <div class="quote-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> กฎวอยึดโซนเพิ่มเติม:</strong><br>
+                    • การเล่นวอยึดโซนจะต้องต่อสู้ <b>ภายในวงเท่านั้น</b> ห้ามออกจากวงเพื่อไปปั๊มยา, ชุบชีวิต หรืออุ้มเพื่อนไปชุบแล้วกลับเข้ามาวงใหม่<br>
+                    • หากไม่สามารถต่อสู้ต่อได้ หรือประสงค์จะถอนตัว ให้ขับรถออกจากพื้นที่นั้นเพื่อยอมแพ้<br>
+                    • ห้ามตีนอกบริเวณวงกิจกรรมเด็ดขาด ต้องตีกันในวงเท่านั้น
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: ข้อมูลติดต่อ -->
+        <section id="contact" class="page-content">
+            <div class="page-header">
+                <h1 class="page-title">ข้อมูลการติดต่อแก๊ง</h1>
+                <p class="page-subtitle">ช่องทางการติดต่อ ดิสคอร์ดหลัก และลิงก์เข้าห้องรอสอบของ BLACK KINGDOM</p>
+            </div>
+
+            <div class="glass-card contact-card">
+                <i class="fa-solid fa-crown contact-logo"></i>
+                <h2 style="color: #fff; font-size: 1.8rem; margin-bottom: 10px;">BLACK KINGDOM 🌊 🩵</h2>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">
+                    รับคนเข้าจำนวนมาก พร้อมลุยทุกกิจกรรม พร้อมช่วยเหลือกัน ใครที่หาเพื่อนหาครอบครัวมาอยู่กับพวกเราได้เลย!
+                </p>
+
+                <div class="contact-links">
+                    <a href="https://discord.gg/C6kKrrGbm" target="_blank" class="btn-discord-waiting">
+                        <i class="fa-brands fa-discord" style="font-size: 1.5rem;"></i>
+                        <span>เข้าสู่ห้องรอสอบ Discord (คลิกที่นี่)</span>
+                    </a>
+
+                    <a href="https://discord.gg/beRkvWM5P" target="_blank" class="btn-discord-main">
+                        <i class="fa-brands fa-discord" style="font-size: 1.2rem; color: #5865F2;"></i>
+                        <span>ดิสคอร์ดหลักแก๊ง BLACK KINGDOM</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            &copy; 2026 BLACK KINGDOM (BKM) All Rights Reserved. Designed for Gang Members.
+        </div>
+    </footer>
+
+    <!-- SUCCESS MODAL POPUP -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card">
+            <i class="fa-solid fa-circle-check modal-icon"></i>
+            <h3 class="modal-title">ส่งใบสมัครสำเร็จ!</h3>
+            <p class="modal-desc">
+                ระบบได้ส่งใบสมัครพร้อมแท็กแจ้งเตือนผู้คุมสอบไปยัง Discord เรียบร้อยแล้ว<br>
+                <b>กรุณากดปุ่มด้านล่างเพื่อเข้าสู่ "ห้องรอสอบ" ใน Discord ทันที</b>
+            </p>
+            <a href="https://discord.gg/C6kKrrGbm" target="_blank" class="btn-discord-waiting" style="margin-bottom: 10px;" onclick="closeModal()">
+                <i class="fa-brands fa-discord"></i> ไปยังห้องรอสอบ Discord
+            </a>
+            <button onclick="closeModal()" style="background: transparent; border: none; color: var(--text-sub); cursor: pointer; font-size: 0.88rem; padding: 5px;">ปิดหน้าต่างนี้</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DISCORD WEBHOOK URL
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1560910735494881402/nzUeuIZSq39cqTlifuljoYVAy78-Bn_XwKHH6K8in_5myVPsG1L6XQiculo68fOXwe_Q";
+
+        // TAB NAVIGATION SYSTEM
+        function switchTab(tabId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Deactivate all nav tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Activate target page
+            const targetPage = document.getElementById(tabId);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Find and activate corresponding nav button
+            tabs.forEach(tab => {
+                if(tab.getAttribute('onclick').includes(tabId)) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Close Mobile Menu if open
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('menuToggle');
+            navLinks.classList.remove('active');
+            if(menuToggle.querySelector('i')) {
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            }
+
+            // Scroll to top smooth
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // MOBILE MENU TOGGLE
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+
+        // FORM SUBMISSION & DISCORD WEBHOOK WITH PING
+        const applyForm = document.getElementById('applyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successModal = document.getElementById('successModal');
+
+        applyForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Disable button during loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่งข้อมูลไปยัง Discord...';
+
+            // Extract Input Values
+            const icName = document.getElementById('icName').value.trim();
+            const icAge = document.getElementById('icAge').value.trim();
+            const icGender = document.getElementById('icGender').value;
+            const level = document.getElementById('level').value.trim();
+
+            const ocName = document.getElementById('ocName').value.trim();
+            const ocAge = document.getElementById('ocAge').value.trim();
+            const ocGender = document.getElementById('ocGender').value;
+            const onlineHours = document.getElementById('onlineHours').value.trim();
+
+            const playStyle = document.getElementById('playStyle').value;
+            const reason = document.getElementById('reason').value.trim();
+            const discordTag = document.getElementById('discordTag').value.trim();
+            const testerTag = document.getElementById('testerTag').value.trim();
+
+            // Construct Discord Ping Content (Mentions @everyone, User Tag & Tester Tag)
+            const pingMessage = `@everyone @here\n📢 **มีใบสมัครใหม่เข้ามาครับ!**\n👤 **ผู้สมัคร:** ${discordTag}\n📋 **ผู้คุมสอบ:** ${testerTag}\n🔗 **ห้องรอสอบ:** https://discord.gg/C6kKrrGbm`;
+
+            // Construct Webhook Payload with Embed
+            const payload = {
+                content: pingMessage,
+                username: "BKM Application Bot",
+                avatar_url: "https://i.imgur.com/v8S7p3R.png",
+                embeds: [
+                    {
+                        title: "🌊 🩵 ใบสมัครเข้าแก๊ง BLACK KINGDOM (BKM)",
+                        description: "มีผู้สนใจสมัครเข้าร่วมตระกูล กรุณาตรวจสอบข้อมูลและดำเนินการสอบตามขั้นตอน",
+                        color: 3719416, // #38BDF8 Hex to Decimal
+                        fields: [
+                            {
+                                name: "👤 ข้อมูล IC (ในเกม)",
+                                value: `• **ชื่อ IC:** ${icName}\n• **อายุ IC:** ${icAge} ปี\n• **เพศ:** ${icGender}\n• **เลเวล:** ${level}`,
+                                inline: true
+                            },
+                            {
+                                name: "🎮 ข้อมูล OC (นอกเกม)",
+                                value: `• **ชื่อ OC:** ${ocName}\n• **อายุ OC:** ${ocAge} ปี\n• **เพศ:** ${ocGender}\n• **เวลาเล่น:** ${onlineHours}`,
+                                inline: true
+                            },
+                            {
+                                name: "⚔️ สายการเล่น",
+                                value: playStyle,
+                                inline: false
+                            },
+                            {
+                                name: "💬 เหตุผลที่อยากเข้าร่วม",
+                                value: reason,
+                                inline: false
+                            },
+                            {
+                                name: "🏷️ แท็ก Discord ผู้สมัคร",
+                                value: discordTag,
+                                inline: true
+                            },
+                            {
+                                name: "📋 แท็กผู้คุมสอบ",
+                                value: testerTag,
+                                inline: true
+                            }
+                        ],
+                        footer: {
+                            text: "BLACK KINGDOM System • " + new Date().toLocaleString('th-TH')
+                        }
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok || response.status === 204) {
+                    showModal();
+                    applyForm.reset();
+                } else {
+                    alert('เกิดข้อผิดพลาดในการส่งข้อมูลไป Discord กรุณาเช็คอินเทอร์เน็ตหรือลองใหม่อีกครั้ง');
+                }
+            } catch (error) {
+                console.error('Error sending webhook:', error);
+                alert('ไม่สามารถเชื่อมต่อกับ Webhook ของ Discord ได้');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ส่งใบสมัครเข้าแก๊ง';
+            }
+        });
+
+        // MODAL DISPLAY LOGIC
+        function showModal() {
+            successModal.classList.add('active');
+        }
+
+        function closeModal() {
+            successModal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
